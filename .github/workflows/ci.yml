@@ -1,0 +1,175 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+env:
+  CARGO_TERM_COLOR: always
+  RUSTFLAGS: -Dwarnings
+
+jobs:
+  check:
+    name: Check Examples
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-action@stable
+        with:
+          components: clippy, rustfmt
+
+      - name: Cache cargo registry
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
+
+      - name: Check all examples compile
+        run: |
+          echo "🔍 Checking all examples..."
+          
+          EXAMPLES=(
+            "hello-world"
+            "crud-api"
+            "auth-api"
+            "cors-test"
+            "sqlx-crud"
+            "event-sourcing"
+            "graphql-api"
+            "mcp-server"
+            "microservices"
+            "microservices-advanced"
+            "middleware-chain"
+            "phase11-demo"
+            "rate-limit-demo"
+            "templates"
+            "toon-api"
+            "websocket"
+            "proof-of-concept"
+          )
+          
+          FAILED=()
+          
+          for example in "${EXAMPLES[@]}"; do
+            echo ""
+            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            echo "📦 Checking: $example"
+            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            
+            if cd "$example" && cargo check --quiet 2>&1; then
+              echo "✅ $example: OK"
+            else
+              echo "❌ $example: FAILED"
+              FAILED+=("$example")
+            fi
+            cd ..
+          done
+          
+          echo ""
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "📊 Summary"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          
+          if [ ${#FAILED[@]} -eq 0 ]; then
+            echo "✅ All ${#EXAMPLES[@]} examples passed!"
+            exit 0
+          else
+            echo "❌ ${#FAILED[@]} example(s) failed:"
+            for f in "${FAILED[@]}"; do
+              echo "   - $f"
+            done
+            exit 1
+          fi
+
+      # Serverless Lambda uses different runtime, check separately
+      - name: Check serverless-lambda
+        run: |
+          echo "📦 Checking: serverless-lambda (AWS Lambda runtime)"
+          cd serverless-lambda && cargo check --quiet
+          echo "✅ serverless-lambda: OK"
+
+  fmt:
+    name: Format Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-action@stable
+        with:
+          components: rustfmt
+
+      - name: Check formatting
+        run: |
+          echo "🎨 Checking code formatting..."
+          
+          EXAMPLES=(
+            "hello-world"
+            "crud-api"
+            "auth-api"
+            "cors-test"
+            "sqlx-crud"
+            "event-sourcing"
+            "graphql-api"
+            "mcp-server"
+            "microservices"
+            "microservices-advanced"
+            "middleware-chain"
+            "phase11-demo"
+            "rate-limit-demo"
+            "serverless-lambda"
+            "templates"
+            "toon-api"
+            "websocket"
+            "proof-of-concept"
+          )
+          
+          for example in "${EXAMPLES[@]}"; do
+            echo "Checking format: $example"
+            cd "$example" && cargo fmt -- --check && cd ..
+          done
+          
+          echo "✅ All formatting checks passed!"
+
+  clippy:
+    name: Clippy Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-action@stable
+        with:
+          components: clippy
+
+      - name: Cache cargo registry
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-clippy-${{ hashFiles('**/Cargo.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-clippy-
+
+      - name: Run Clippy on examples
+        run: |
+          echo "🔎 Running Clippy lints..."
+          
+          # Quick clippy check on a few key examples
+          for example in hello-world crud-api auth-api middleware-chain; do
+            echo "Linting: $example"
+            cd "$example" && cargo clippy --quiet -- -D warnings && cd ..
+          done
+          
+          echo "✅ Clippy checks passed!"

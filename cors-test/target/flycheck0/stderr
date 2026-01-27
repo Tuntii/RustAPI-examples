@@ -1,4 +1,3 @@
-    Blocking waiting for file lock on package cache
 error: failed to get `rustapi-macros` as a dependency of package `cors-test v0.1.0 (C:\Users\tunay\Documents\GitHub\rustapi-rs-examples\cors-test)`
 
 Caused by:

@@ -1,3 +1,31 @@
+//! # Order Service
+//!
+//! Microservice for order processing with service discovery.
+//!
+//! ## Features
+//!
+//! - Order creation with product price lookup
+//! - Dynamic service discovery via Registry
+//! - Client-side load balancing (round-robin ready)
+//! - Self-registration with heartbeat
+//!
+//! ## Endpoints
+//!
+//! - `POST /orders` - Create a new order
+//!
+//! ## Service Discovery Flow
+//!
+//! 1. Order service receives create request
+//! 2. Queries Registry for Product Service instances
+//! 3. Fetches product price from discovered instance
+//! 4. Creates order with calculated total
+//!
+//! ## Run
+//!
+//! ```bash
+//! cargo run --bin order
+//! ```
+
 use reqwest::Client;
 use rustapi_rs::prelude::*;
 use serde::{Deserialize, Serialize};

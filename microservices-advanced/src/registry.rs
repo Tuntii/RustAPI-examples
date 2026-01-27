@@ -1,3 +1,25 @@
+//! # Service Registry
+//!
+//! Central service registry for microservices discovery pattern.
+//!
+//! ## Features
+//!
+//! - Service registration with heartbeat
+//! - Service discovery by name
+//! - Automatic stale instance cleanup
+//! - Thread-safe concurrent access with DashMap
+//!
+//! ## Endpoints
+//!
+//! - `POST /register` - Register a service instance
+//! - `GET /discover/{name}` - Discover instances of a service
+//!
+//! ## Run
+//!
+//! ```bash
+//! cargo run --bin registry
+//! ```
+
 use dashmap::DashMap;
 use rustapi_rs::prelude::*;
 use serde::{Deserialize, Serialize};

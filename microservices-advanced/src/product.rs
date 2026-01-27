@@ -1,3 +1,24 @@
+//! # Product Service
+//!
+//! Microservice for product catalog management.
+//!
+//! ## Features
+//!
+//! - Product listing and retrieval
+//! - Self-registration with Service Registry
+//! - Automatic heartbeat for health checking
+//!
+//! ## Endpoints
+//!
+//! - `GET /products` - List all products
+//! - `GET /products/{id}` - Get product by ID
+//!
+//! ## Run
+//!
+//! ```bash
+//! cargo run --bin product
+//! ```
+
 use rustapi_rs::prelude::*;
 use serde::{Deserialize, Serialize};
 use std::env;

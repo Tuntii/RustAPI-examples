@@ -1,3 +1,4 @@
+    Blocking waiting for file lock on package cache
     Updating crates.io index
 error: failed to get `rustapi-rs` as a dependency of package `microservices v0.1.0 (C:\Users\tunay\Documents\GitHub\rustapi-rs-examples\microservices)`
 
