@@ -1,0 +1,17 @@
+[package]
+name = "event-sourcing"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+rustapi-rs = { path = "../../crates/rustapi-rs" }
+tokio = { version = "1", features = ["full"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = { workspace = true }
+uuid = { workspace = true, features = ["v4", "serde"] }
+thiserror = { workspace = true }
+async-trait = { workspace = true }
+dashmap = "5.5"
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+utoipa = { workspace = true }

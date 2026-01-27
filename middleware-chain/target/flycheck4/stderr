@@ -1,0 +1,15 @@
+    Blocking waiting for file lock on package cache
+    Updating crates.io index
+error: failed to get `rustapi-core` as a dependency of package `middleware-chain v0.1.0 (C:\Users\tunay\Documents\GitHub\rustapi-rs-examples\middleware-chain)`
+
+Caused by:
+  failed to load source for dependency `rustapi-core`
+
+Caused by:
+  Unable to update C:\Users\tunay\Documents\GitHub\crates\rustapi-core
+
+Caused by:
+  failed to read `C:\Users\tunay\Documents\GitHub\crates\rustapi-core\Cargo.toml`
+
+Caused by:
+  Sistem belirtilen yolu bulamıyor. (os error 3)

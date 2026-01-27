@@ -1,0 +1,14 @@
+    Updating crates.io index
+error: failed to get `rustapi-rs` as a dependency of package `graphql-api v0.1.0 (C:\Users\tunay\Documents\GitHub\rustapi-rs-examples\graphql-api)`
+
+Caused by:
+  failed to load source for dependency `rustapi-rs`
+
+Caused by:
+  Unable to update C:\Users\tunay\Documents\GitHub\crates\rustapi-rs
+
+Caused by:
+  failed to read `C:\Users\tunay\Documents\GitHub\crates\rustapi-rs\Cargo.toml`
+
+Caused by:
+  Sistem belirtilen yolu bulamıyor. (os error 3)
