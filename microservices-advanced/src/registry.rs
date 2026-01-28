@@ -43,6 +43,11 @@ pub struct RegisterRequest {
     pub url: String,
 }
 
+#[derive(Serialize, Schema)]
+pub struct RegisterResponse {
+    pub message: String,
+}
+
 #[derive(Serialize, Deserialize, Schema)]
 pub struct DiscoverResponse {
     pub instances: Vec<ServiceInstance>,
@@ -51,7 +56,7 @@ pub struct DiscoverResponse {
 async fn register(
     State(state): State<RegistryState>,
     Json(payload): Json<RegisterRequest>,
-) -> Json<String> {
+) -> Result<Json<RegisterResponse>, ApiError> {
     let now = SystemTime::now()
         .duration_since(UNIX_EPOCH)
         .unwrap()
@@ -70,7 +75,9 @@ async fn register(
         state.services.insert(payload.service_name, vec![instance]);
     }
 
-    Json("Registered".to_string())
+    Ok(Json(RegisterResponse {
+        message: "Registered".to_string(),
+    }))
 }
 
 async fn discover(
@@ -86,17 +93,19 @@ async fn discover(
     }
 }
 
-#[derive(Serialize)]
+#[derive(Serialize, Schema)]
 pub struct ServicesListResponse {
     pub services: std::collections::HashMap<String, Vec<ServiceInstance>>,
 }
 
-async fn list_services(State(state): State<RegistryState>) -> Json<ServicesListResponse> {
+async fn list_services(
+    State(state): State<RegistryState>,
+) -> Result<Json<ServicesListResponse>, ApiError> {
     let mut services = std::collections::HashMap::new();
     for entry in &*state.services {
         services.insert(entry.key().clone(), entry.value().clone());
     }
-    Json(ServicesListResponse { services })
+    Ok(Json(ServicesListResponse { services }))
 }
 
 #[tokio::main]

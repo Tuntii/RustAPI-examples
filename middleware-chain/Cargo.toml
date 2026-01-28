@@ -4,9 +4,9 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-rustapi-rs = { path = "../../crates/rustapi-rs", features = ["jwt", "cors"] }
-rustapi-core = { path = "../../crates/rustapi-core" }
-tokio = { version = "1", features = ["full"] }
-serde = { version = "1", features = ["derive"] }
-utoipa = "4.2"
+rustapi-rs = { workspace = true, features = ["jwt", "cors"] }
+rustapi-core = { workspace = true }
+tokio = { workspace = true }
+serde = { workspace = true }
+utoipa = { workspace = true }
 http = "1"

@@ -1,0 +1,37 @@
+[workspace]
+members = [
+  "hello-world",
+  "crud-api",
+  "auth-api",
+  "cors-test",
+  "sqlx-crud",
+  "event-sourcing",
+  "graphql-api",
+  "mcp-server",
+  "microservices",
+  "microservices-advanced",
+  "middleware-chain",
+  "phase11-demo",
+  "rate-limit-demo",
+  "templates",
+  "toon-api",
+  "websocket",
+  "proof-of-concept",
+]
+
+[workspace.dependencies]
+rustapi-rs = "0.1"
+rustapi-core = "0.1"
+rustapi-macros = "0.1"
+rustapi-extras = "0.1"
+tokio = { version = "1", features = ["full", "sync"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+tracing = "0.1"
+tracing-subscriber = "0.3"
+validator = "0.16"
+utoipa = "4"
+async-trait = "0.1"
+thiserror = "1"
+uuid = { version = "1.6", features = ["v4", "serde"] }
+futures-util = "0.3"

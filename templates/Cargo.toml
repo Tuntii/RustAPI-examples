@@ -5,7 +5,7 @@ edition = "2021"
 publish = false
 
 [dependencies]
-rustapi-rs = { path = "../../crates/rustapi-rs", features = ["view"] }
+rustapi-rs = { workspace = true, features = ["view"] }
 utoipa = { workspace = true }
 tokio = { workspace = true }
 serde = { workspace = true }

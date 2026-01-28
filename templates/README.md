@@ -308,7 +308,7 @@ base.html
 
 ```toml
 [dependencies]
-rustapi-rs = { version = "0.2", features = ["view"] }
+rustapi-rs = { version = "0.1", features = ["view"] }
 tokio = { version = "1", features = ["full"] }
 serde = { version = "1", features = ["derive"] }
 utoipa = "4"

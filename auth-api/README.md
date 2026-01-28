@@ -242,7 +242,7 @@ async fn handler(AuthUser(claims): AuthUser<Claims>) -> impl IntoResponse {
 
 ```toml
 [dependencies]
-rustapi-rs = { version = "0.2", features = ["jwt", "rate-limit"] }
+rustapi-rs = { version = "0.1", features = ["jwt", "rate-limit"] }
 tokio = { version = "1", features = ["full"] }
 serde = { version = "1", features = ["derive"] }
 validator = "0.16"

@@ -1,0 +1,2 @@
+fn(rustapi_rs::State<RegistryState>, rustapi_rs::Json<RegisterRequest>) -> impl Future<Output = rustapi_rs::Json<std::string::String>> {register}
+fn(rustapi_rs::State<RegistryState>, rustapi_rs::Json<RegisterRequest>) -> impl Future<Output = rustapi_rs::Json<std::string::String>> {register}: Handler<_>

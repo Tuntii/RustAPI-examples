@@ -31,8 +31,14 @@ struct Product {
     price: f64,
 }
 
-async fn get_products() -> Json<Vec<Product>> {
-    Json(vec![
+#[derive(Serialize, Schema)]
+struct ProductList {
+    products: Vec<Product>,
+}
+
+async fn get_products() -> Json<ProductList> {
+    Json(ProductList {
+        products: vec![
         Product {
             id: "1".to_string(),
             name: "Laptop".to_string(),
@@ -43,7 +49,8 @@ async fn get_products() -> Json<Vec<Product>> {
             name: "Mouse".to_string(),
             price: 29.99,
         },
-    ])
+        ],
+    })
 }
 
 async fn get_product(Path(id): Path<String>) -> Result<Json<Product>, ApiError> {

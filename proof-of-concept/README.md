@@ -349,7 +349,7 @@ edition = "2021"
 description = "Comprehensive POC demonstrating all RustAPI features"
 
 [dependencies]
-rustapi-rs = { version = "0.2", features = ["jwt", "cors", "rate-limit"] }
+rustapi-rs = { version = "0.1", features = ["jwt", "cors", "rate-limit"] }
 tokio = { version = "1", features = ["full"] }
 serde = { version = "1", features = ["derive"] }
 chrono = "0.4"

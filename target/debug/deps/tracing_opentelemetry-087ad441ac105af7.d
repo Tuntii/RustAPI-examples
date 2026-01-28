@@ -1,0 +1,13 @@
+/home/runner/work/RustAPI-examples/RustAPI-examples/target/debug/deps/tracing_opentelemetry-087ad441ac105af7.d: /home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tracing-opentelemetry-0.32.1/src/lib.rs /home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tracing-opentelemetry-0.32.1/src/metrics.rs /home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tracing-opentelemetry-0.32.1/src/layer.rs /home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tracing-opentelemetry-0.32.1/src/layer/filtered.rs /home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tracing-opentelemetry-0.32.1/src/otel_context.rs /home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tracing-opentelemetry-0.32.1/src/span_ext.rs /home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tracing-opentelemetry-0.32.1/src/stack.rs
+
+/home/runner/work/RustAPI-examples/RustAPI-examples/target/debug/deps/libtracing_opentelemetry-087ad441ac105af7.rmeta: /home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tracing-opentelemetry-0.32.1/src/lib.rs /home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tracing-opentelemetry-0.32.1/src/metrics.rs /home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tracing-opentelemetry-0.32.1/src/layer.rs /home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tracing-opentelemetry-0.32.1/src/layer/filtered.rs /home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tracing-opentelemetry-0.32.1/src/otel_context.rs /home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tracing-opentelemetry-0.32.1/src/span_ext.rs /home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tracing-opentelemetry-0.32.1/src/stack.rs
+
+/home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tracing-opentelemetry-0.32.1/src/lib.rs:
+/home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tracing-opentelemetry-0.32.1/src/metrics.rs:
+/home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tracing-opentelemetry-0.32.1/src/layer.rs:
+/home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tracing-opentelemetry-0.32.1/src/layer/filtered.rs:
+/home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tracing-opentelemetry-0.32.1/src/otel_context.rs:
+/home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tracing-opentelemetry-0.32.1/src/span_ext.rs:
+/home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/tracing-opentelemetry-0.32.1/src/stack.rs:
+
+# env-dep:CARGO_PKG_VERSION=0.32.1

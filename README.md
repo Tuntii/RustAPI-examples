@@ -235,7 +235,7 @@ Each example maps to sections in the [RustAPI Cookbook](https://tuntii.github.io
    edition = "2021"
 
    [dependencies]
-   rustapi-rs = { path = "../../crates/rustapi-rs", features = ["full"] }
+   rustapi-rs = { version = "0.1", features = ["full"] }
    tokio = { version = "1", features = ["full"] }
    serde = { version = "1", features = ["derive"] }
    ```

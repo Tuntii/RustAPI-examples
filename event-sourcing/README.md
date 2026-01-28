@@ -294,7 +294,7 @@ let account = events.iter().fold(BankAccount::default(), |mut acc, e| {
 
 ```toml
 [dependencies]
-rustapi-rs = { version = "0.2" }
+rustapi-rs = { version = "0.1" }
 tokio = { version = "1", features = ["full"] }
 serde = { version = "1", features = ["derive"] }
 dashmap = "5.5"

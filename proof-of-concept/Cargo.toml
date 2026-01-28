@@ -6,15 +6,15 @@ publish = false
 description = "Comprehensive POC demonstrating all RustAPI features - Bookmark Manager"
 
 [dependencies]
-rustapi-rs = { path = "../../crates/rustapi-rs", features = ["jwt", "cors", "rate-limit"] }
-tokio = { version = "1.35", features = ["full", "sync"] }
-serde = { version = "1.0", features = ["derive"] }
-serde_json = "1.0"
+rustapi-rs = { workspace = true, features = ["jwt", "cors", "rate-limit"] }
+tokio = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
 validator = { workspace = true }
 utoipa = { workspace = true }
 chrono = { version = "0.4", features = ["serde"] }
-uuid = { version = "1.6", features = ["v4", "serde"] }
-futures-util = "0.3"
+uuid = { workspace = true, features = ["v4", "serde"] }
+futures-util = { workspace = true }
 
 [dev-dependencies]
 proptest = "1.4"

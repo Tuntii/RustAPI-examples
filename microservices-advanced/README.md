@@ -250,7 +250,7 @@ fn select_instance(instances: &[ServiceInstance]) -> Option<&ServiceInstance> {
 
 ```toml
 [dependencies]
-rustapi-rs = { version = "0.2" }
+rustapi-rs = { version = "0.1" }
 tokio = { version = "1", features = ["full"] }
 reqwest = { version = "0.12", features = ["json"] }
 dashmap = "5.5"

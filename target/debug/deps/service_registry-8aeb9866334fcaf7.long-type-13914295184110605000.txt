@@ -1,0 +1,2 @@
+fn(rustapi_rs::State<RegistryState>) -> impl Future<Output = std::result::Result<rustapi_rs::Json<ServicesListResponse>, rustapi_rs::ApiError>> {list_services}
+fn(rustapi_rs::State<RegistryState>) -> impl Future<Output = std::result::Result<rustapi_rs::Json<ServicesListResponse>, rustapi_rs::ApiError>> {list_services}: Handler<_>

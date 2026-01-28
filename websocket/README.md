@@ -286,7 +286,7 @@ Client                    Server
 
 ```toml
 [dependencies]
-rustapi-rs = { version = "0.2", features = ["ws"] }
+rustapi-rs = { version = "0.1", features = ["ws"] }
 tokio = { version = "1", features = ["full"] }
 serde = { version = "1", features = ["derive"] }
 futures-util = "0.3"

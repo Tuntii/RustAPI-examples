@@ -189,7 +189,7 @@ Enable features in your `Cargo.toml`:
 
 ```toml
 [dependencies]
-rustapi-extras = { version = "0.9", features = [
+rustapi-extras = { version = "0.1", features = [
     "timeout",
     "guard",
     "logging",

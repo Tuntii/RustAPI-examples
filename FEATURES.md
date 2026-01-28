@@ -12,7 +12,7 @@ RustAPI uses Cargo feature flags to enable optional functionality. This modular 
 
 ```toml
 [dependencies]
-rustapi-rs = { version = "0.2", features = ["jwt", "cors"] }
+rustapi-rs = { version = "0.1", features = ["jwt", "cors"] }
 ```
 
 ---
@@ -24,7 +24,7 @@ rustapi-rs = { version = "0.2", features = ["jwt", "cors"] }
 **Enables all features** — Use this when you need everything or for rapid prototyping.
 
 ```toml
-rustapi-rs = { version = "0.2", features = ["full"] }
+rustapi-rs = { version = "0.1", features = ["full"] }
 ```
 
 **Includes**: jwt, cors, rate-limit, toon, ws, view, swagger-ui, and all middleware
@@ -45,7 +45,7 @@ rustapi-rs = { version = "0.2", features = ["full"] }
 **JWT Authentication** — Adds `JwtLayer` middleware and `AuthUser<T>` extractor.
 
 ```toml
-rustapi-rs = { version = "0.2", features = ["jwt"] }
+rustapi-rs = { version = "0.1", features = ["jwt"] }
 ```
 
 **Provides**:
@@ -98,7 +98,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
 **Cross-Origin Resource Sharing** — Adds `CorsLayer` for configuring CORS headers.
 
 ```toml
-rustapi-rs = { version = "0.2", features = ["cors"] }
+rustapi-rs = { version = "0.1", features = ["cors"] }
 ```
 
 **Provides**:
@@ -141,7 +141,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
 **Rate Limiting** — Adds `RateLimitLayer` for IP-based request throttling.
 
 ```toml
-rustapi-rs = { version = "0.2", features = ["rate-limit"] }
+rustapi-rs = { version = "0.1", features = ["rate-limit"] }
 ```
 
 **Provides**:
@@ -185,7 +185,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
 **Token-Oriented Object Notation** — AI-optimized response format with 50-58% token savings.
 
 ```toml
-rustapi-rs = { version = "0.2", features = ["toon"] }
+rustapi-rs = { version = "0.1", features = ["toon"] }
 ```
 
 **Provides**:
@@ -239,7 +239,7 @@ curl -H "Accept: application/toon" http://localhost:8080/user/1
 **WebSocket Support** — Real-time bidirectional communication.
 
 ```toml
-rustapi-rs = { version = "0.2", features = ["ws"] }
+rustapi-rs = { version = "0.1", features = ["ws"] }
 ```
 
 **Provides**:
@@ -278,7 +278,7 @@ async fn websocket_handler(ws: WebSocket) -> WsConnection {
 **Template Rendering** — Server-side HTML with Tera templates.
 
 ```toml
-rustapi-rs = { version = "0.2", features = ["view"] }
+rustapi-rs = { version = "0.1", features = ["view"] }
 ```
 
 **Provides**:
@@ -319,7 +319,7 @@ async fn index(engine: State<ViewEngine>) -> View<PageContext> {
 **Swagger UI** — Interactive API documentation at `/docs`.
 
 ```toml
-rustapi-rs = { version = "0.2", features = ["swagger-ui"] }
+rustapi-rs = { version = "0.1", features = ["swagger-ui"] }
 ```
 
 **Provides**:
@@ -344,7 +344,7 @@ Some examples use additional RustAPI ecosystem crates:
 Low-level core functionality for advanced use cases.
 
 ```toml
-rustapi-core = { version = "0.2" }
+rustapi-core = { version = "0.1" }
 ```
 
 **Used in**: middleware-chain, phase11-demo
@@ -354,7 +354,7 @@ rustapi-core = { version = "0.2" }
 Procedural macros (usually re-exported from `rustapi-rs`).
 
 ```toml
-rustapi-macros = { version = "0.2" }
+rustapi-macros = { version = "0.1" }
 ```
 
 **Used in**: cors-test, phase11-demo
@@ -364,7 +364,7 @@ rustapi-macros = { version = "0.2" }
 Additional middleware and utilities.
 
 ```toml
-rustapi-extras = { version = "0.2", features = ["sqlx", "timeout", "guard"] }
+rustapi-extras = { version = "0.1", features = ["sqlx", "timeout", "guard"] }
 ```
 
 **Features**:
@@ -385,28 +385,28 @@ Common feature combinations for different use cases:
 
 ### REST API with Auth
 ```toml
-rustapi-rs = { version = "0.2", features = ["jwt", "cors", "rate-limit"] }
+rustapi-rs = { version = "0.1", features = ["jwt", "cors", "rate-limit"] }
 ```
 
 ### AI/LLM Backend
 ```toml
-rustapi-rs = { version = "0.2", features = ["toon", "cors"] }
+rustapi-rs = { version = "0.1", features = ["toon", "cors"] }
 ```
 
 ### Full-Stack Web App
 ```toml
-rustapi-rs = { version = "0.2", features = ["view", "jwt", "cors"] }
+rustapi-rs = { version = "0.1", features = ["view", "jwt", "cors"] }
 ```
 
 ### Real-time Application
 ```toml
-rustapi-rs = { version = "0.2", features = ["ws", "cors"] }
+rustapi-rs = { version = "0.1", features = ["ws", "cors"] }
 ```
 
 ### Production API
 ```toml
-rustapi-rs = { version = "0.2", features = ["jwt", "cors", "rate-limit", "swagger-ui"] }
-rustapi-extras = { version = "0.2", features = ["timeout", "logging", "circuit-breaker"] }
+rustapi-rs = { version = "0.1", features = ["jwt", "cors", "rate-limit", "swagger-ui"] }
+rustapi-extras = { version = "0.1", features = ["timeout", "logging", "circuit-breaker"] }
 ```
 
 ---

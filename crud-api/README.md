@@ -223,7 +223,7 @@ pub struct PaginatedResponse<T> {
 
 ```toml
 [dependencies]
-rustapi-rs = { version = "0.2", features = ["full"] }
+rustapi-rs = { version = "0.1", features = ["full"] }
 tokio = { version = "1", features = ["full"] }
 serde = { version = "1", features = ["derive"] }
 validator = "0.16"

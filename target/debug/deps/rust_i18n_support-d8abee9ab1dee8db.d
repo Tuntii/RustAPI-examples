@@ -1,0 +1,10 @@
+/home/runner/work/RustAPI-examples/RustAPI-examples/target/debug/deps/rust_i18n_support-d8abee9ab1dee8db.d: /home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/rust-i18n-support-3.1.5/src/lib.rs /home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/rust-i18n-support-3.1.5/src/atomic_str.rs /home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/rust-i18n-support-3.1.5/src/backend.rs /home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/rust-i18n-support-3.1.5/src/config.rs /home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/rust-i18n-support-3.1.5/src/cow_str.rs /home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/rust-i18n-support-3.1.5/src/minify_key.rs
+
+/home/runner/work/RustAPI-examples/RustAPI-examples/target/debug/deps/librust_i18n_support-d8abee9ab1dee8db.rmeta: /home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/rust-i18n-support-3.1.5/src/lib.rs /home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/rust-i18n-support-3.1.5/src/atomic_str.rs /home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/rust-i18n-support-3.1.5/src/backend.rs /home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/rust-i18n-support-3.1.5/src/config.rs /home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/rust-i18n-support-3.1.5/src/cow_str.rs /home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/rust-i18n-support-3.1.5/src/minify_key.rs
+
+/home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/rust-i18n-support-3.1.5/src/lib.rs:
+/home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/rust-i18n-support-3.1.5/src/atomic_str.rs:
+/home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/rust-i18n-support-3.1.5/src/backend.rs:
+/home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/rust-i18n-support-3.1.5/src/config.rs:
+/home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/rust-i18n-support-3.1.5/src/cow_str.rs:
+/home/runner/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/rust-i18n-support-3.1.5/src/minify_key.rs:

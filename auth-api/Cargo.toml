@@ -6,8 +6,8 @@ publish = false
 description = "Authentication example demonstrating JWT middleware"
 
 [dependencies]
-rustapi-rs = { path = "../../crates/rustapi-rs", features = ["jwt", "rate-limit"] }
-tokio = { version = "1.35", features = ["full"] }
-serde = { version = "1.0", features = ["derive"] }
+rustapi-rs = { workspace = true, features = ["jwt", "rate-limit"] }
+tokio = { workspace = true }
+serde = { workspace = true }
 validator = { workspace = true }
 utoipa = { workspace = true }

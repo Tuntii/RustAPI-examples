@@ -6,8 +6,8 @@ publish = false
 description = "CRUD API example demonstrating all RustAPI features"
 
 [dependencies]
-rustapi-rs = { path = "../../crates/rustapi-rs", features = ["full"] }
-tokio = { version = "1.35", features = ["full"] }
-serde = { version = "1.0", features = ["derive"] }
+rustapi-rs = { workspace = true, features = ["full"] }
+tokio = { workspace = true }
+serde = { workspace = true }
 validator = { workspace = true }
 utoipa = { workspace = true }

@@ -182,7 +182,7 @@ RustApi::new()
 
 ```toml
 [dependencies]
-rustapi-rs = { version = "0.2", features = ["cors", "rate-limit"] }
+rustapi-rs = { version = "0.1", features = ["cors", "rate-limit"] }
 tokio = { version = "1", features = ["full"] }
 serde = "1"
 ```

@@ -272,8 +272,8 @@ sqlx::query("SELECT * FROM users WHERE id = ? AND name = ?")
 
 ```toml
 [dependencies]
-rustapi-rs = { version = "0.2" }
-rustapi-extras = { version = "0.2", features = ["sqlx"] }
+rustapi-rs = { version = "0.1" }
+rustapi-extras = { version = "0.1", features = ["sqlx"] }
 tokio = { version = "1", features = ["full"] }
 sqlx = { version = "0.8", features = ["runtime-tokio", "sqlite"] }
 serde = { version = "1", features = ["derive"] }
