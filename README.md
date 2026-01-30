@@ -110,9 +110,6 @@ This repository contains **18 production-ready examples** organized by category:
 | [microservices](microservices/) | ⭐⭐⭐⭐ | API Gateway pattern | Service-to-service communication, routing |
 | [microservices-advanced](microservices-advanced/) | ⭐⭐⭐⭐ | Service discovery | Registry, heartbeat, Docker Compose |
 | [phase11-demo](phase11-demo/) | ⭐⭐⭐⭐ | Advanced middleware | Guards, circuit breaker, timeout, logging |
-| [serverless-lambda](serverless-lambda/) | ⭐⭐⭐ | AWS Lambda deployment | SAM template, cold start optimization |
-
-> ⚠️ **Note**: `serverless-lambda` uses AWS Lambda HTTP runtime instead of RustAPI for serverless deployment patterns.
 
 ---
 

@@ -90,13 +90,6 @@ jobs:
             exit 1
           fi
 
-      # Serverless Lambda uses different runtime, check separately
-      - name: Check serverless-lambda
-        run: |
-          echo "📦 Checking: serverless-lambda (AWS Lambda runtime)"
-          cd serverless-lambda && cargo check --quiet
-          echo "✅ serverless-lambda: OK"
-
   fmt:
     name: Format Check
     runs-on: ubuntu-latest
@@ -126,7 +119,6 @@ jobs:
             "middleware-chain"
             "phase11-demo"
             "rate-limit-demo"
-            "serverless-lambda"
             "templates"
             "toon-api"
             "websocket"
