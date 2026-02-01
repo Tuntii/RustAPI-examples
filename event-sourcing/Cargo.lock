@@ -352,6 +352,7 @@ version = "0.1.0"
 dependencies = [
  "async-trait",
  "dashmap",
+ "rustapi-openapi",
  "rustapi-rs",
  "serde",
  "serde_json",

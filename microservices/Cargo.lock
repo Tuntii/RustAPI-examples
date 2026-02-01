@@ -998,6 +998,7 @@ name = "microservices"
 version = "0.1.0"
 dependencies = [
  "reqwest",
+ "rustapi-openapi",
  "rustapi-rs",
  "serde",
  "serde_json",

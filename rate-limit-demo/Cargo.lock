@@ -1182,8 +1182,10 @@ dependencies = [
 name = "rate-limit-demo"
 version = "0.1.0"
 dependencies = [
+ "rustapi-openapi",
  "rustapi-rs",
  "serde",
+ "serde_json",
  "tokio",
  "utoipa",
 ]

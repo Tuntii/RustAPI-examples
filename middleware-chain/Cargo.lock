@@ -956,8 +956,10 @@ name = "middleware-chain"
 version = "0.1.0"
 dependencies = [
  "http",
+ "rustapi-openapi",
  "rustapi-rs",
  "serde",
+ "serde_json",
  "tokio",
  "utoipa",
 ]

@@ -1235,6 +1235,7 @@ dependencies = [
  "chrono",
  "futures-util",
  "proptest",
+ "rustapi-openapi",
  "rustapi-rs",
  "serde",
  "serde_json",

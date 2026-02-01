@@ -86,7 +86,7 @@ async fn discover(
     }
 }
 
-#[derive(Serialize)]
+#[derive(Serialize, Schema)]
 pub struct ServicesListResponse {
     pub services: std::collections::HashMap<String, Vec<ServiceInstance>>,
 }

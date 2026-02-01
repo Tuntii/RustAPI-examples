@@ -1018,6 +1018,7 @@ version = "0.1.0"
 dependencies = [
  "dashmap",
  "reqwest",
+ "rustapi-openapi",
  "rustapi-rs",
  "serde",
  "serde_json",

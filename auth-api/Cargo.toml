@@ -7,7 +7,9 @@ description = "Authentication example demonstrating JWT middleware"
 
 [dependencies]
 rustapi-rs = { version = "0.1.233", features = ["jwt", "rate-limit"] }
+rustapi-openapi = "0.1.233"
 tokio = { version = "1.35", features = ["full"] }
 serde = { version = "1.0", features = ["derive"] }
+serde_json = "1"
 validator = "0.18"
 utoipa = "4.2"
