@@ -142,8 +142,8 @@ pub struct BookmarkResponse {
     pub description: Option<String>,
     pub category_id: Option<u64>,
     pub is_favorite: bool,
-    pub created_at: DateTime<Utc>,
-    pub updated_at: DateTime<Utc>,
+    pub created_at: String,
+    pub updated_at: String,
 }
 
 impl From<&Bookmark> for BookmarkResponse {
@@ -155,14 +155,14 @@ impl From<&Bookmark> for BookmarkResponse {
             description: b.description.clone(),
             category_id: b.category_id,
             is_favorite: b.is_favorite,
-            created_at: b.created_at,
-            updated_at: b.updated_at,
+            created_at: b.created_at.to_rfc3339(),
+            updated_at: b.updated_at.to_rfc3339(),
         }
     }
 }
 
 /// Query parameters for listing bookmarks
-#[derive(Debug, Deserialize, Default, IntoParams)]
+#[derive(Debug, Deserialize, Default, Schema)]
 pub struct BookmarkListParams {
     pub page: Option<u32>,
     pub limit: Option<u32>,
@@ -173,7 +173,7 @@ pub struct BookmarkListParams {
 
 /// Paginated response wrapper
 #[derive(Debug, Serialize, Schema)]
-pub struct PaginatedResponse<T> {
+pub struct PaginatedResponse<T: rustapi_openapi::schema::RustApiSchema> {
     pub items: Vec<T>,
     pub total: usize,
     pub page: u32,
@@ -215,7 +215,7 @@ pub struct CategoryResponse {
     pub id: u64,
     pub name: String,
     pub color: Option<String>,
-    pub created_at: DateTime<Utc>,
+    pub created_at: String,
 }
 
 impl From<&Category> for CategoryResponse {
@@ -224,7 +224,7 @@ impl From<&Category> for CategoryResponse {
             id: c.id,
             name: c.name.clone(),
             color: c.color.clone(),
-            created_at: c.created_at,
+            created_at: c.created_at.to_rfc3339(),
         }
     }
 }
