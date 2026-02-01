@@ -48,19 +48,19 @@
 
 use rustapi_rs::prelude::*;
 use rustapi_rs::toon::{AcceptHeader, LlmResponse, Toon};
+use rustapi_openapi::Schema;
 use std::collections::HashMap;
-use utoipa::ToSchema;
 
 // --- Data Models ---
 
-#[derive(Debug, Clone, Serialize, Deserialize, ToSchema)]
+#[derive(Debug, Clone, Serialize, Deserialize, Schema)]
 struct Tool {
     name: String,
     description: String,
     input_schema: ToolSchema,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, ToSchema)]
+#[derive(Debug, Clone, Serialize, Deserialize, Schema)]
 struct ToolSchema {
     #[serde(rename = "type")]
     schema_type: String,
@@ -68,7 +68,7 @@ struct ToolSchema {
     required: Vec<String>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, ToSchema)]
+#[derive(Debug, Clone, Serialize, Deserialize, Schema)]
 struct PropertySchema {
     #[serde(rename = "type")]
     prop_type: String,
@@ -77,18 +77,18 @@ struct PropertySchema {
     enum_values: Option<Vec<String>>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, ToSchema)]
+#[derive(Debug, Clone, Serialize, Deserialize, Schema)]
 struct ToolsListResponse {
     tools: Vec<Tool>,
 }
 
-#[derive(Debug, Deserialize, ToSchema)]
+#[derive(Debug, Deserialize, Schema)]
 struct ToolExecuteRequest {
     tool: String,
     arguments: HashMap<String, String>, // Simplified to String instead of serde_json::Value
 }
 
-#[derive(Debug, Clone, Serialize, ToSchema)]
+#[derive(Debug, Clone, Serialize, Schema)]
 struct ToolExecuteResponse {
     success: bool,
     result: String,
@@ -96,7 +96,7 @@ struct ToolExecuteResponse {
     error: Option<String>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, ToSchema)]
+#[derive(Debug, Clone, Serialize, Deserialize, Schema)]
 struct Resource {
     uri: String,
     name: String,
@@ -104,12 +104,12 @@ struct Resource {
     mime_type: String,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, ToSchema)]
+#[derive(Debug, Clone, Serialize, Deserialize, Schema)]
 struct ResourcesListResponse {
     resources: Vec<Resource>,
 }
 
-#[derive(Debug, Clone, Serialize, ToSchema)]
+#[derive(Debug, Clone, Serialize, Schema)]
 struct ServerInfo {
     name: String,
     version: String,
@@ -117,7 +117,7 @@ struct ServerInfo {
     capabilities: Capabilities,
 }
 
-#[derive(Debug, Clone, Serialize, ToSchema)]
+#[derive(Debug, Clone, Serialize, Schema)]
 struct Capabilities {
     tools: bool,
     resources: bool,
