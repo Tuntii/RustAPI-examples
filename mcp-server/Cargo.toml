@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-rustapi-rs = { path = "../../crates/rustapi-rs", features = ["toon"] }
+rustapi-rs = { version = "0.1.236", features = ["toon"] }
 serde = { version = "1.0", features = ["derive"] }
 tokio = { version = "1.41", features = ["full"] }
 utoipa = "4.2"

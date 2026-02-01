@@ -2,3 +2,16 @@
 /serverless-lambda/target
 /serverless-lambda
 /microservices/target
+/cors-test/target
+/graphql-api/target
+/hello-world/target
+/mcp-server/target
+/middleware-chain/target
+/phase11-demo/target
+/rate-limit-demo/target
+/toon-api/target
+/cors-test
+/cors-test/target
+/rate-limit-demo/target
+/event-sourcing/target
+/microservices-advanced/target
