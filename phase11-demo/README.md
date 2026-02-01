@@ -23,12 +23,12 @@ Declarative route protection with compile-time type safety.
 ```rust
 use rustapi_extras::{RoleGuard, PermissionGuard};
 
-#[rustapi::get("/admin")]
+#[rustapi_rs::get("/admin")]
 async fn admin_only(guard: RoleGuard<"admin">) -> &'static str {
     "Admin area"
 }
 
-#[rustapi::get("/users/delete")]
+#[rustapi_rs::get("/users/delete")]
 async fn delete_user(guard: PermissionGuard<"users.delete">) -> &'static str {
     "Delete user"
 }
