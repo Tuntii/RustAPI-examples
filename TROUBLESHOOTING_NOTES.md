@@ -103,7 +103,57 @@ async fn handler() -> Result<Json<Data>> {
 
 ---
 
-### 4. **Query Extractor ile Attribute Macros**
+### 4. **rustapi_core ve rustapi_macros Kullanma**
+
+**Sorun:**
+```rust
+use rustapi_core::{RustApi, health::HealthCheckBuilder};  // ❌ Eski modül
+use rustapi_macros::get;  // ❌ Eski macro path
+```
+```
+error[E0433]: failed to resolve: use of unresolved module or unlinked crate `rustapi_core`
+error[E0433]: failed to resolve: use of unresolved module or unlinked crate `rustapi_macros`
+```
+
+**Çözüm:**
+```rust
+use rustapi_rs::prelude::*;  // ✅ Her şey burada
+```
+
+**Macro Kullanımı:**
+```rust
+// ❌ Eski (çalışmaz)
+#[rustapi_macros::get("/")]
+async fn index() -> &'static str { ... }
+
+// ✅ Yeni (doğru)
+#[rustapi_rs::get("/")]
+async fn index() -> &'static str { ... }
+```
+
+**Route Kaydı:**
+```rust
+// ❌ Manuel mount (deprecated)
+let app = RustApi::new()
+    .mount(handler1)
+    .mount(handler2);
+
+// ✅ Auto-registration (önerilen)
+RustApi::auto()  // Macro'lu handler'ları otomatik bulur
+    .state(my_state)
+    .layer(my_middleware)
+    .run("127.0.0.1:3000")
+    .await
+```
+
+**Neden?**
+- `rustapi_core` ve `rustapi_macros` internal modüllerdir ve doğrudan import edilmemelidir
+- Tüm public API `rustapi_rs` crate'inden export edilir
+- `RustApi::auto()` kullanarak macro'lu handler'ları manuel kaydetmeye gerek kalmaz
+
+---
+
+### 5. **Query Extractor ile Attribute Macros**
 
 **Yanlış:**
 ```rust

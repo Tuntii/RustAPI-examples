@@ -4,14 +4,9 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-rustapi-rs = { version = "0.1.233", features = [
-    "full",
-    "timeout",
-    "guard",
-    "logging",
-    "circuit-breaker",
-    "jwt",
-] }
+rustapi-rs = { version = "0.1.233", features = ["full"] }
+rustapi-openapi = "0.1.233"
+chrono = { version = "0.4", features = ["serde"] }
 tokio = { version = "1.42", features = ["full"] }
 tracing = "0.1"
 tracing-subscriber = "0.3"

@@ -212,6 +212,7 @@ dependencies = [
  "iana-time-zone",
  "js-sys",
  "num-traits",
+ "serde",
  "wasm-bindgen",
  "windows-link",
 ]
@@ -1519,6 +1520,8 @@ dependencies = [
 name = "phase11-demo"
 version = "0.1.0"
 dependencies = [
+ "chrono",
+ "rustapi-openapi",
  "rustapi-rs",
  "serde",
  "serde_json",

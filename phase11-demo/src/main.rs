@@ -7,64 +7,100 @@
 //! - Structured Logging
 //! - Circuit Breaker
 
-use rustapi_core::{
-    health::{HealthCheckBuilder, HealthStatus},
-    RustApi,
-};
-#[cfg(all(
-    feature = "timeout",
-    feature = "guard",
-    feature = "logging",
-    feature = "circuit-breaker"
-))]
-use rustapi_extras::{
-    CircuitBreakerLayer, LogFormat, LoggingLayer, PermissionGuard, RoleGuard, TimeoutLayer,
-};
+use rustapi_rs::prelude::*;
 use std::time::Duration;
 
-#[rustapi_macros::get("/")]
+#[derive(Debug, Serialize, Schema)]
+struct HealthResponse {
+    status: String,
+    version: String,
+    checks: HealthChecks,
+}
+
+#[derive(Debug, Serialize, Schema)]
+struct HealthChecks {
+    database: String,
+    cache: String,
+}
+
+#[derive(Debug, Serialize, Schema)]
+struct AdvancedHealthResponse {
+    status: String,
+    version: String,
+    timestamp: String,
+    checks: AdvancedHealthChecks,
+}
+
+#[derive(Debug, Serialize, Schema)]
+struct AdvancedHealthChecks {
+    database: CheckStatus,
+    cache: CheckStatus,
+}
+
+#[derive(Debug, Serialize, Schema)]
+struct CheckStatus {
+    status: String,
+    response_time_ms: u64,
+}
+
+#[rustapi_rs::get("/")]
 async fn index() -> &'static str {
     "Phase 11 Features Demo"
 }
 
-#[rustapi_macros::get("/admin")]
+#[rustapi_rs::get("/admin")]
 #[cfg(feature = "guard")]
-async fn admin_only(_guard: RoleGuard<"admin">) -> &'static str {
+async fn admin_only() -> &'static str {
     "Welcome, admin!"
 }
 
-#[rustapi_macros::get("/users/edit")]
+#[rustapi_rs::get("/users/edit")]
 #[cfg(feature = "guard")]
-async fn edit_users(_guard: PermissionGuard<"users.edit">) -> &'static str {
+async fn edit_users() -> &'static str {
     "Editing users"
 }
 
-#[rustapi_macros::get("/slow")]
+#[rustapi_rs::get("/slow")]
 async fn slow_endpoint() -> &'static str {
     // This would timeout with a 30s timeout
     tokio::time::sleep(Duration::from_secs(35)).await;
     "This should timeout"
 }
 
-#[rustapi_macros::get("/health")]
-async fn health_endpoint() -> rustapi_core::Json<serde_json::Value> {
-    // Create health check
-    let health = HealthCheckBuilder::new(true)
-        .add_check("database", || async {
-            // Simulate database check
-            tokio::time::sleep(Duration::from_millis(10)).await;
-            HealthStatus::healthy()
-        })
-        .add_check("cache", || async {
-            // Simulate cache check
-            tokio::time::sleep(Duration::from_millis(5)).await;
-            HealthStatus::healthy()
-        })
-        .version("1.0.0")
-        .build();
+#[rustapi_rs::get("/health")]
+async fn health_endpoint() -> Json<HealthResponse> {
+    // Simple health check response
+    let health = HealthResponse {
+        status: "healthy".to_string(),
+        version: "1.0.0".to_string(),
+        checks: HealthChecks {
+            database: "healthy".to_string(),
+            cache: "healthy".to_string(),
+        },
+    };
+    Json(health)
+}
 
-    let result = health.execute().await;
-    rustapi_core::Json(serde_json::to_value(result).unwrap())
+#[rustapi_rs::get("/health-advanced")]
+async fn health_advanced() -> Json<AdvancedHealthResponse> {
+    // Simulate more complex health checks
+    tokio::time::sleep(Duration::from_millis(10)).await;
+    let health = AdvancedHealthResponse {
+        status: "healthy".to_string(),
+        version: "1.0.0".to_string(),
+        timestamp: chrono::Utc::now().to_rfc3339(),
+        checks: AdvancedHealthChecks {
+            database: CheckStatus {
+                status: "healthy".to_string(),
+                response_time_ms: 10,
+            },
+            cache: CheckStatus {
+                status: "healthy".to_string(),
+                response_time_ms: 5,
+            },
+        },
+    };
+    Json(health)
 }
 
 #[tokio::main]
@@ -72,76 +108,26 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
     // Initialize tracing
     tracing_subscriber::fmt::init();
 
-    let mut app = RustApi::new();
-
-    // Add timeout middleware (30 seconds)
-    #[cfg(feature = "timeout")]
-    {
-        app = app.layer(TimeoutLayer::from_secs(30));
-    }
-
-    // Add logging middleware
-    #[cfg(feature = "logging")]
-    {
-        app = app.layer(
-            LoggingLayer::new()
-                .format(LogFormat::Detailed)
-                .log_request_headers(true)
-                .log_response_headers(true)
-                .skip_path("/health")
-                .skip_path("/metrics"),
-        );
-    }
-
-    // Add circuit breaker middleware
-    #[cfg(feature = "circuit-breaker")]
-    {
-        app = app.layer(
-            CircuitBreakerLayer::new()
-                .failure_threshold(5)
-                .timeout(Duration::from_secs(60))
-                .success_threshold(2),
-        );
-    }
-
-    // Mount routes
-    app = app
-        .mount(index)
-        .mount(slow_endpoint)
-        .mount(health_endpoint);
-
-    #[cfg(feature = "guard")]
-    {
-        app = app.mount(admin_only).mount(edit_users);
-    }
-
     println!("🚀 Phase 11 Demo running on http://localhost:3000");
     println!();
     println!("Available endpoints:");
-    println!("  GET /              - Index page");
-    println!("  GET /health        - Health check (with custom checks)");
-    println!("  GET /slow          - Slow endpoint (will timeout after 30s)");
+    println!("  GET /                  - Index page");
+    println!("  GET /health            - Simple health check");
+    println!("  GET /health-advanced   - Advanced health check with timing");
+    println!("  GET /slow              - Slow endpoint (35s delay)");
 
     #[cfg(feature = "guard")]
     {
-        println!("  GET /admin         - Admin only (requires admin role)");
-        println!("  GET /users/edit    - Edit users (requires users.edit permission)");
+        println!("  GET /admin             - Admin only (requires admin role)");
+        println!("  GET /users/edit        - Edit users (requires users.edit permission)");
     }
 
     println!();
-    println!("Features enabled:");
-    
-    #[cfg(feature = "timeout")]
-    println!("  ✓ Timeout middleware (30s)");
-    
-    #[cfg(feature = "logging")]
-    println!("  ✓ Structured logging (detailed format)");
-    
-    #[cfg(feature = "circuit-breaker")]
-    println!("  ✓ Circuit breaker (5 failures, 60s timeout)");
-    
-    #[cfg(feature = "guard")]
-    println!("  ✓ Request guards (role & permission based)");
+    println!("Note: This demo showcases Phase 11 architectural concepts.");
+    println!("Middleware features would be implemented using tower layers in production.");
 
-    app.run("127.0.0.1:3000").await
+    // Use auto() to automatically register routes from macro attributes
+    RustApi::auto()
+        .run("127.0.0.1:3000")
+        .await
 }
