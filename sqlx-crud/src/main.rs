@@ -21,8 +21,8 @@
 //! - `DELETE /users/{id}` - Delete a user
 //! - `POST /users/batch` - Create multiple users in a transaction
 
-use rustapi_extras::SqlxErrorExt;
 use rustapi_rs::prelude::*;
+use rustapi_rs::SqlxErrorExt;
 use sqlx::{Pool, Sqlite, SqlitePool};
 use std::sync::Arc;
 

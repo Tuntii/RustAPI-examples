@@ -56,7 +56,54 @@ rustapi-openapi = "0.1.233"  # ✅ Bunu kullan
 
 ---
 
-### 3. **Query Extractor ile Attribute Macros**
+### 3. **rustapi_extras Değil, rustapi_rs Kullan**
+
+**Sorun:**
+```rust
+use rustapi_extras::SqlxErrorExt;  // ❌ Eski isim
+```
+```
+error[E0432]: unresolved import `rustapi_extras`
+  --> src/main.rs:24:5
+   |
+24 | use rustapi_extras::SqlxErrorExt;
+   |     ^^^^^^^^^^^^^^ use of unresolved module or unlinked crate `rustapi_extras`
+```
+
+**Çözüm:**
+```rust
+use rustapi_rs::SqlxErrorExt;  // ✅ Doğru import
+```
+
+**Neden?**
+- `rustapi_extras` eski bir modül ismidir ve artık mevcut değildir
+- SQLx error extension trait'i artık doğrudan `rustapi_rs` içindedir
+- Bu trait'i kullanmak için `rustapi-rs`'nin `sqlx` feature'ını etkinleştirmeniz gerekir
+
+**Gerekli Konfigürasyon:**
+```toml
+[dependencies]
+rustapi-rs = { version = "0.1.233", features = ["sqlx"] }
+```
+
+**Kullanım:**
+```rust
+use rustapi_rs::prelude::*;
+use rustapi_rs::SqlxErrorExt;  // ✅ Doğru path
+
+async fn handler() -> Result<Json<Data>> {
+    let data = sqlx::query_as::<_, Data>("SELECT * FROM items")
+        .fetch_all(&pool)
+        .await
+        .map_err(|e| e.into_api_error())?;  // SqlxErrorExt trait metodu
+    
+    Ok(Json(data))
+}
+```
+
+---
+
+### 4. **Query Extractor ile Attribute Macros**
 
 **Yanlış:**
 ```rust
@@ -89,7 +136,7 @@ pub struct ListParams {
 
 ---
 
-### 4. **Handler Macro Kullanımı**
+### 5. **Handler Macro Kullanımı**
 
 **Doğru Kullanım:**
 ```rust
