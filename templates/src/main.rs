@@ -10,9 +10,10 @@
 
 use rustapi_rs::prelude::*;
 use rustapi_rs::view::{ContextBuilder, Templates, View};
+use rustapi_openapi::Schema;
 
 /// Contact form params
-#[derive(Debug, Clone, Deserialize, IntoParams)]
+#[derive(Debug, Clone, Deserialize, Schema)]
 struct ContactForm {
     name: Option<String>,
     message: Option<String>,
