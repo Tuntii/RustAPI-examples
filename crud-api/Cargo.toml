@@ -6,7 +6,7 @@ publish = false
 description = "CRUD API example demonstrating all RustAPI features"
 
 [dependencies]
-rustapi-rs = { version = "0.1.236", features = ["full"] }
+rustapi-rs = { version = "0.1.233", features = ["full"] }
 tokio = { version = "1.35", features = ["full"] }
 serde = { version = "1.0", features = ["derive"] }
 validator = "0.18"

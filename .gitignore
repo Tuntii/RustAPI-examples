@@ -16,3 +16,7 @@
 /event-sourcing/target
 /microservices-advanced/target
 /auth-api/target
+/crud-api/target/debug
+/crud-api/target
+*.timestamp
+/proof-of-concept/target

@@ -5,7 +5,7 @@ edition = "2021"
 publish = false
 
 [dependencies]
-rustapi-rs = { version = "0.1.236", features = ["view"] }
+rustapi-rs = { version = "0.1.233", features = ["view"] }
 utoipa = "4.2"
 tokio = { version = "1", features = ["full"] }
 serde = { version = "1", features = ["derive"] }
