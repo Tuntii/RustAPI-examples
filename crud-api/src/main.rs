@@ -55,15 +55,13 @@ pub struct PatchTask {
 }
 
 /// Query parameters for listing tasks
-#[derive(Debug, Deserialize, IntoParams)]
+#[derive(Debug, Deserialize, Schema)]
 pub struct ListParams {
     /// Filter by completion status
     pub completed: Option<bool>,
     /// Page number (1-indexed)
-    #[param(minimum = 1)]
     pub page: Option<u32>,
     /// Items per page
-    #[param(minimum = 1, maximum = 100)]
     pub limit: Option<u32>,
 }
 

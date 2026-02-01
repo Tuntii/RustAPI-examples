@@ -165,29 +165,40 @@ type ApiSchema = Schema<QueryRoot, MutationRoot, EmptySubscription>;
 // Handlers
 // ============================================
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Schema)]
 struct GraphQLRequest {
     query: String,
     #[serde(default)]
-    variables: serde_json::Value,
+    variables: Option<String>,
     #[serde(default)]
     operation_name: Option<String>,
+}
+
+/// GraphQL response wrapper
+#[derive(Serialize, Schema)]
+struct GraphQLResponse {
+    /// JSON response as string
+    response: String,
 }
 
 /// GraphQL endpoint
 #[rustapi_rs::post("/graphql")]
 async fn graphql_handler(
-    schema: State<ApiSchema>,
+    State(schema): State<ApiSchema>,
     Json(request): Json<GraphQLRequest>,
-) -> Json<serde_json::Value> {
+) -> Json<GraphQLResponse> {
     let query = request.query;
     let response = schema.execute(&query).await;
-    Json(serde_json::to_value(response).unwrap())
+    let response_str = serde_json::to_string(&response).unwrap();
+    
+    Json(GraphQLResponse {
+        response: response_str,
+    })
 }
 
 /// GraphQL playground UI
 #[rustapi_rs::get("/graphql")]
-async fn graphql_playground() -> impl IntoResponse {
+async fn graphql_playground() -> Html<String> {
     Html(
         r#"
         <!DOCTYPE html>
@@ -211,20 +222,34 @@ async fn graphql_playground() -> impl IntoResponse {
             </script>
         </body>
         </html>
-        "#,
+        "#.to_string(),
     )
+}
+
+/// Index response
+#[derive(Serialize, Schema)]
+struct IndexResponse {
+    message: String,
+    endpoints: Endpoints,
+    example_query: String,
+}
+
+#[derive(Serialize, Schema)]
+struct Endpoints {
+    graphql: String,
+    playground: String,
 }
 
 /// Root endpoint
 #[rustapi_rs::get("/")]
-async fn index() -> Json<serde_json::Value> {
-    Json(serde_json::json!({
-        "message": "GraphQL API Demo",
-        "endpoints": {
-            "graphql": "/graphql",
-            "playground": "/graphql (GET)"
+async fn index() -> Json<IndexResponse> {
+    Json(IndexResponse {
+        message: "GraphQL API Demo".to_string(),
+        endpoints: Endpoints {
+            graphql: "/graphql".to_string(),
+            playground: "/graphql (GET)".to_string(),
         },
-        "example_query": r#"
+        example_query: r#"
 {
   books {
     id
@@ -233,8 +258,8 @@ async fn index() -> Json<serde_json::Value> {
     year
   }
 }
-        "#
-    }))
+        "#.to_string(),
+    })
 }
 
 // ============================================
