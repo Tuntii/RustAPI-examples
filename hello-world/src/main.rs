@@ -22,9 +22,8 @@
 //! <https://tuntii.github.io/RustAPI/>
 
 use rustapi_rs::prelude::*;
-use serde::Serialize;
 
-#[derive(Serialize, utoipa::ToSchema)]
+#[derive(Serialize, Schema)]
 struct Message {
     greeting: String,
 }

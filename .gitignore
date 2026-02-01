@@ -20,3 +20,6 @@
 /crud-api/target
 *.timestamp
 /proof-of-concept/target
+/sqlx-crud/target
+/templates/target
+/websocket/target
