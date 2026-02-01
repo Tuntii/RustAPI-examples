@@ -16,8 +16,8 @@ use std::future::Future;
 use std::pin::Pin;
 use std::time::Instant;
 
-// Import middleware traits from rustapi_core since they're not re-exported
-use rustapi_core::middleware::{BoxedNext, MiddlewareLayer};
+// Import middleware traits from rustapi_rs
+use rustapi_rs::middleware::{BoxedNext, MiddlewareLayer};
 
 // ============================================
 // Custom Middleware

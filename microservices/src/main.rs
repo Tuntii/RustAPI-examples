@@ -36,7 +36,7 @@ struct Order {
 #[derive(Serialize, Schema)]
 struct GatewayResponse {
     service: String,
-    data: serde_json::Value,
+    data: String,  // JSON as string since serde_json::Value doesn't implement Schema
 }
 
 // ============================================
@@ -119,7 +119,7 @@ mod gateway {
 
         Json(GatewayResponse {
             service: "user-service".to_string(),
-            data: serde_json::to_value(user).unwrap(),
+            data: serde_json::to_string(&user).unwrap(),
         })
     }
 
@@ -137,7 +137,7 @@ mod gateway {
 
         Json(GatewayResponse {
             service: "order-service".to_string(),
-            data: serde_json::to_value(order).unwrap(),
+            data: serde_json::to_string(&order).unwrap(),
         })
     }
 

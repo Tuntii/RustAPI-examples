@@ -37,6 +37,7 @@ struct Author {
 // Database Mock
 // ============================================
 
+#[allow(dead_code)]
 #[derive(Clone)]
 struct Database {
     books: Arc<RwLock<HashMap<u64, Book>>>,
@@ -165,6 +166,7 @@ type ApiSchema = Schema<QueryRoot, MutationRoot, EmptySubscription>;
 // Handlers
 // ============================================
 
+#[allow(dead_code)]
 #[derive(Deserialize, Schema)]
 struct GraphQLRequest {
     query: String,

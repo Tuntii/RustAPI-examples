@@ -48,18 +48,6 @@ async fn index() -> &'static str {
     "Phase 11 Features Demo"
 }
 
-#[rustapi_rs::get("/admin")]
-#[cfg(feature = "guard")]
-async fn admin_only() -> &'static str {
-    "Welcome, admin!"
-}
-
-#[rustapi_rs::get("/users/edit")]
-#[cfg(feature = "guard")]
-async fn edit_users() -> &'static str {
-    "Editing users"
-}
-
 #[rustapi_rs::get("/slow")]
 async fn slow_endpoint() -> &'static str {
     // This would timeout with a 30s timeout
@@ -115,12 +103,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
     println!("  GET /health            - Simple health check");
     println!("  GET /health-advanced   - Advanced health check with timing");
     println!("  GET /slow              - Slow endpoint (35s delay)");
-
-    #[cfg(feature = "guard")]
-    {
-        println!("  GET /admin             - Admin only (requires admin role)");
-        println!("  GET /users/edit        - Edit users (requires users.edit permission)");
-    }
 
     println!();
     println!("Note: This demo showcases Phase 11 architectural concepts.");
