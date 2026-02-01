@@ -175,14 +175,32 @@ pub struct ListParams {
 
 **Notlar:**
 - `#[param(...)]` attribute'u RustAPI'de yok
-- Validation kuralları için `validator` crate kullan:
+- Validation kuralları için RustAPI'nin built-in validation sistemini kullan:
   ```rust
+  use rustapi_validate::Validate;
+  
   #[derive(Debug, Deserialize, Validate, Schema)]
   pub struct CreateTask {
       #[validate(length(min = 1, max = 200))]
       pub title: String,
+      #[validate(email)]
+      pub email: String,
+  }
+  
+  // Handler'da ValidatedJson kullan
+  async fn create_task(
+      Json(task): ValidatedJson<CreateTask>
+  ) -> Result<Json<Task>> {
+      // Validation otomatik yapılır, hata varsa 400 döner
+      Ok(Json(task.into_inner()))
   }
   ```
+
+**RustAPI Validation Özellikleri:**
+- `ValidatedJson<T>` - Otomatik validation + JSON parsing
+- `#[validate(...)]` attribute'ları rustapi-validate'den gelir
+- Validation hataları otomatik olarak formatlanır
+- Built-in validators: length, email, range, url, regex, custom, vb.
 
 ---
 
@@ -288,6 +306,143 @@ async fn handler() -> Html<String> {  // ✅ Concrete type
 - `String` - Plain text
 - `StatusCode` - Sadece status code
 - `(StatusCode, Json<T>)` - Status + JSON
+
+---
+
+### 7. **DateTime<Utc> Schema Sorunu**
+
+**Sorun:**
+```rust
+#[derive(Debug, Serialize, Schema)]
+pub struct BookmarkResponse {
+    pub id: u64,
+    pub created_at: DateTime<Utc>,  // ❌ RustApiSchema implement etmiyor
+    pub updated_at: DateTime<Utc>,
+}
+```
+```
+error[E0277]: the trait bound `DateTime<Utc>: RustApiSchema` is not satisfied
+```
+
+**Çözüm:**
+DateTime'ı String olarak kullan ve RFC3339 formatında dönüştür:
+
+```rust
+#[derive(Debug, Serialize, Schema)]
+pub struct BookmarkResponse {
+    pub id: u64,
+    pub created_at: String,  // ✅ String kullan
+    pub updated_at: String,
+}
+
+// From/Into implementasyonunda dönüştür:
+impl From<&Bookmark> for BookmarkResponse {
+    fn from(b: &Bookmark) -> Self {
+        Self {
+            id: b.id,
+            created_at: b.created_at.to_rfc3339(),  // DateTime -> String
+            updated_at: b.updated_at.to_rfc3339(),
+        }
+    }
+}
+```
+
+**Alternatif - Unix Timestamp:**
+```rust
+#[derive(Debug, Serialize, Schema)]
+pub struct BookmarkResponse {
+    pub created_at: i64,  // Unix timestamp (seconds)
+}
+
+impl From<&Bookmark> for BookmarkResponse {
+    fn from(b: &Bookmark) -> Self {
+        Self {
+            created_at: b.created_at.timestamp(),
+        }
+    }
+}
+```
+
+**Neden?**
+- `chrono::DateTime<Utc>` RustAPI'nin Schema trait'ini implement etmez
+- OpenAPI spec'inde date-time'lar genellikle RFC3339 string formatındadır
+- Client tarafında parse etmek daha kolay (JavaScript, Python, etc.)
+- String representation timezone bilgisini de içerir
+
+**Best Practice:**
+- Response DTO'larda `String` kullan (RFC3339 format)
+- Internal model'lerde `DateTime<Utc>` kullan
+- Dönüşümü From/Into trait'leriyle yap
+
+---
+
+### 8. **Generic Type'larda Schema Trait Bound**
+
+**Sorun:**
+```rust
+#[derive(Debug, Serialize, Schema)]
+pub struct PaginatedResponse<T> {  // ❌ T için trait bound eksik
+    pub items: Vec<T>,
+    pub total: usize,
+}
+```
+```
+error[E0277]: the trait bound `T: RustApiSchema` is not satisfied
+```
+
+**Çözüm:**
+Generic type'a `RustApiSchema` trait bound ekle:
+
+```rust
+#[derive(Debug, Serialize, Schema)]
+pub struct PaginatedResponse<T: rustapi_openapi::schema::RustApiSchema> {  // ✅ Trait bound
+    pub items: Vec<T>,
+    pub total: usize,
+    pub page: u32,
+    pub limit: u32,
+}
+
+// Kullanım:
+async fn list_items() -> Json<PaginatedResponse<ItemResponse>> {
+    // ItemResponse: Schema derive'ına sahip olmalı
+    Json(PaginatedResponse {
+        items: vec![],
+        total: 0,
+        page: 1,
+        limit: 20,
+    })
+}
+```
+
+**Alternatif - Type Alias:**
+```rust
+// Generic yerine concrete type'lar için type alias
+pub type BookmarkList = PaginatedResponse<BookmarkResponse>;
+pub type CategoryList = PaginatedResponse<CategoryResponse>;
+
+async fn list_bookmarks() -> Json<BookmarkList> {
+    // ...
+}
+```
+
+**Neden?**
+- `Vec<T>` RustApiSchema implement eder, ancak `T` de RustApiSchema olmalı
+- Compiler, `T`'nin hangi trait'leri implement ettiğini bilmeli
+- OpenAPI spec oluştururken concrete type bilgisi gerekli
+
+**Trait Bound Şablonu:**
+```rust
+// ✅ Tam trait path
+T: rustapi_openapi::schema::RustApiSchema
+
+// ✅ Import ile kullanım
+use rustapi_openapi::schema::RustApiSchema;
+T: RustApiSchema
+
+// ✅ Prelude'dan
+use rustapi_rs::prelude::*;
+T: RustApiSchema
+```
 
 ---
 
