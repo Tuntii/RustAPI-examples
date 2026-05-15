@@ -1,0 +1,14 @@
+[workspace]
+resolver = "2"
+members = [
+    "01-hello-world",
+    "02-crud-api",
+    "03-jwt-auth",
+    "04-sse-stream",
+]
+
+[workspace.package]
+edition = "2021"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/Tuntii/rustapi-rs-examples"
+rust-version = "1.85"

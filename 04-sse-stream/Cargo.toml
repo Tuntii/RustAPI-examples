@@ -1,0 +1,13 @@
+[package]
+name = "sse-stream"
+version = "0.1.0"
+edition.workspace = true
+license.workspace = true
+
+# Run with: cargo run -p sse-stream
+
+[dependencies]
+rustapi-rs = { version = "0.1" }
+tokio = { version = "1", features = ["full"] }
+serde = { version = "1", features = ["derive"] }
+futures-util = "0.3"

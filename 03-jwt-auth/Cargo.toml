@@ -1,0 +1,12 @@
+[package]
+name = "jwt-auth"
+version = "0.1.0"
+edition.workspace = true
+license.workspace = true
+
+# Run with: cargo run -p jwt-auth
+
+[dependencies]
+rustapi-rs = { version = "0.1", features = ["jwt", "swagger-ui"] }
+tokio = { version = "1", features = ["full"] }
+serde = { version = "1", features = ["derive"] }
