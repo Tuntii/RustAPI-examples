@@ -54,10 +54,21 @@ struct UpdateNote {
 // Error type
 // ---------------------------------------------------------------------------
 
+// NOTE: #[derive(ApiError)] generates IntoResponse for custom error enums.
+//       Handler return types must use ApiError directly (it implements ResponseModifier).
+//       NoteError is kept here to show the derive pattern; use ApiError in handlers.
 #[derive(ApiError)]
 enum NoteError {
     #[error(status = 404, code = "NOT_FOUND", message = "Note not found")]
     NotFound,
+}
+
+impl From<NoteError> for ApiError {
+    fn from(e: NoteError) -> Self {
+        match e {
+            NoteError::NotFound => ApiError::not_found("Note not found"),
+        }
+    }
 }
 
 // ---------------------------------------------------------------------------
@@ -98,7 +109,7 @@ async fn create_note(
 async fn get_note(
     State(state): State<AppState>,
     Path(id): Path<u64>,
-) -> Result<Json<Note>, NoteError> {
+) -> Result<Json<Note>, ApiError> {
     state
         .notes
         .read()
@@ -106,7 +117,7 @@ async fn get_note(
         .get(&id)
         .cloned()
         .map(Json)
-        .ok_or(NoteError::NotFound)
+        .ok_or_else(|| ApiError::not_found("Note not found"))
 }
 
 #[put("/notes/{id}")]
@@ -117,9 +128,9 @@ async fn update_note(
     State(state): State<AppState>,
     Path(id): Path<u64>,
     Json(payload): Json<UpdateNote>,
-) -> Result<Json<Note>, NoteError> {
+) -> Result<Json<Note>, ApiError> {
     let mut notes = state.notes.write().await;
-    let note = notes.get_mut(&id).ok_or(NoteError::NotFound)?;
+    let note = notes.get_mut(&id).ok_or_else(|| ApiError::not_found("Note not found"))?;
     if let Some(t) = payload.title {
         note.title = t;
     }
@@ -135,11 +146,11 @@ async fn update_note(
 async fn delete_note(
     State(state): State<AppState>,
     Path(id): Path<u64>,
-) -> Result<NoContent, NoteError> {
+) -> Result<NoContent, ApiError> {
     if state.notes.write().await.remove(&id).is_some() {
         Ok(NoContent)
     } else {
-        Err(NoteError::NotFound)
+        Err(ApiError::not_found("Note not found"))
     }
 }
 
