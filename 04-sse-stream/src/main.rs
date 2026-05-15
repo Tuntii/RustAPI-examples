@@ -1,15 +1,13 @@
 // Run with: cargo run -p sse-stream
-// Then open: http://127.0.0.1:3000/events  (SSE stream)
-//            http://127.0.0.1:3000/        (HTML test page)
+// Then open: http://127.0.0.1:3000/         (HTML test page)
+//            http://127.0.0.1:3000/events   (raw SSE stream)
 //
-// Lesson: Server-Sent Events (SSE) — push real-time updates from the server
-//         to the client over a plain HTTP connection, with keep-alive pings.
+// Lesson: Server-Sent Events with #[get] auto-registration.
+//         RustApi::auto() — zero .route() calls.
 
 use rustapi_rs::prelude::*;
+use rustapi_rs::{description, get, summary};
 use std::convert::Infallible;
-use tokio::time::{Duration, interval};
-use tokio_stream::wrappers::IntervalStream;
-use futures_util::StreamExt;
 
 // ---------------------------------------------------------------------------
 // Models
@@ -25,32 +23,27 @@ struct Tick {
 // Handlers
 // ---------------------------------------------------------------------------
 
-/// Streams a numbered tick every second for 10 ticks, then closes.
+#[get("/events")]
 #[summary("Event stream")]
-#[description("Sends a `tick` SSE event once per second for 10 seconds.")]
+#[description("Sends a `tick` SSE event once per second for 10 ticks, then closes.")]
 async fn event_stream(
 ) -> Sse<impl futures_util::Stream<Item = std::result::Result<SseEvent, Infallible>>> {
-    let mut counter = 0_u64;
-    let stream = IntervalStream::new(interval(Duration::from_secs(1)))
-        .take(10)
-        .map(move |_| {
-            counter += 1;
-            let tick = Tick {
-                count: counter,
-                message: format!("tick {counter} of 10"),
-            };
-            Ok::<_, Infallible>(
-                SseEvent::json_data(&tick)
-                    .expect("tick should serialize")
-                    .event("tick")
-                    .id(counter.to_string()),
-            )
-        });
+    let events: Vec<Result<SseEvent, Infallible>> = (1..=10_u64)
+        .map(|i| {
+            Ok(SseEvent::json_data(&Tick {
+                count: i,
+                message: format!("tick {i} of 10"),
+            })
+            .expect("tick should serialize")
+            .event("tick")
+            .id(i.to_string()))
+        })
+        .collect();
 
-    sse_from_stream(stream).keep_alive(KeepAlive::new())
+    sse_from_iter(events).keep_alive(KeepAlive::new())
 }
 
-/// Tiny HTML page that consumes the SSE stream in the browser.
+#[get("/")]
 async fn index() -> Html<&'static str> {
     Html(
         r#"<!DOCTYPE html>
@@ -83,10 +76,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
     println!("Starting sse-stream example…");
     println!(" -> GET http://127.0.0.1:3000/         (HTML test page)");
     println!(" -> GET http://127.0.0.1:3000/events   (raw SSE stream)");
+    println!(" -> GET http://127.0.0.1:3000/__rustapi/dashboard");
 
-    RustApi::new()
-        .route("/", get(index))
-        .route("/events", get(event_stream))
+    // Zero configuration — #[get] macros register all routes at compile time.
+    RustApi::auto()
+        .dashboard(DashboardConfig::new())
         .run("127.0.0.1:3000")
         .await
 }

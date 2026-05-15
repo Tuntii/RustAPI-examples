@@ -5,6 +5,7 @@
 //         and proper extractor ordering (body extractor goes last).
 
 use rustapi_rs::prelude::*;
+use rustapi_rs::{delete, get, post, put, summary, tag};
 use std::{
     collections::HashMap,
     sync::{
@@ -50,9 +51,20 @@ struct UpdateNote {
 }
 
 // ---------------------------------------------------------------------------
-// Handlers
+// Error type
 // ---------------------------------------------------------------------------
 
+#[derive(ApiError)]
+enum NoteError {
+    #[error(status = 404, code = "NOT_FOUND", message = "Note not found")]
+    NotFound,
+}
+
+// ---------------------------------------------------------------------------
+// Handlers — zero .route() calls needed
+// ---------------------------------------------------------------------------
+
+#[get("/notes")]
 #[tag("notes")]
 #[summary("List all notes")]
 async fn list_notes(State(state): State<AppState>) -> Json<Vec<Note>> {
@@ -62,6 +74,7 @@ async fn list_notes(State(state): State<AppState>) -> Json<Vec<Note>> {
     Json(items)
 }
 
+#[post("/notes")]
 #[tag("notes")]
 #[summary("Create a note")]
 // NOTE: body extractor (Json) must come last in the signature.
@@ -79,20 +92,24 @@ async fn create_note(
     Created(note)
 }
 
+#[get("/notes/{id}")]
 #[tag("notes")]
 #[summary("Get a note by ID")]
 async fn get_note(
     State(state): State<AppState>,
     Path(id): Path<u64>,
-) -> Result<Json<Note>, NotFound> {
-    let notes = state.notes.read().await;
-    notes
+) -> Result<Json<Note>, NoteError> {
+    state
+        .notes
+        .read()
+        .await
         .get(&id)
         .cloned()
         .map(Json)
-        .ok_or(NotFound)
+        .ok_or(NoteError::NotFound)
 }
 
+#[put("/notes/{id}")]
 #[tag("notes")]
 #[summary("Update a note")]
 // NOTE: body extractor (Json) must come last in the signature.
@@ -100,9 +117,9 @@ async fn update_note(
     State(state): State<AppState>,
     Path(id): Path<u64>,
     Json(payload): Json<UpdateNote>,
-) -> Result<Json<Note>, NotFound> {
+) -> Result<Json<Note>, NoteError> {
     let mut notes = state.notes.write().await;
-    let note = notes.get_mut(&id).ok_or(NotFound)?;
+    let note = notes.get_mut(&id).ok_or(NoteError::NotFound)?;
     if let Some(t) = payload.title {
         note.title = t;
     }
@@ -112,17 +129,17 @@ async fn update_note(
     Ok(Json(note.clone()))
 }
 
+#[delete("/notes/{id}")]
 #[tag("notes")]
 #[summary("Delete a note")]
 async fn delete_note(
     State(state): State<AppState>,
     Path(id): Path<u64>,
-) -> Result<NoContent, NotFound> {
-    let mut notes = state.notes.write().await;
-    if notes.remove(&id).is_some() {
+) -> Result<NoContent, NoteError> {
+    if state.notes.write().await.remove(&id).is_some() {
         Ok(NoContent)
     } else {
-        Err(NotFound)
+        Err(NoteError::NotFound)
     }
 }
 
@@ -144,12 +161,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
     println!(" -> PUT    http://127.0.0.1:3000/notes/{{id}}");
     println!(" -> DELETE http://127.0.0.1:3000/notes/{{id}}");
     println!(" -> GET    http://127.0.0.1:3000/docs");
+    println!(" -> GET    http://127.0.0.1:3000/__rustapi/dashboard");
 
-    RustApi::new()
-        .swagger_ui("/docs")
+    // Only state is provided — all routes are auto-discovered from the macros above.
+    RustApi::auto()
         .state(state)
-        .route("/notes", get(list_notes).post(create_note))
-        .route("/notes/{id}", get(get_note).put(update_note).delete(delete_note))
+        .dashboard(DashboardConfig::new())
         .run("127.0.0.1:3000")
         .await
 }

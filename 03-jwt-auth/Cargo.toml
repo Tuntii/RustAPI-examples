@@ -7,6 +7,6 @@ license.workspace = true
 # Run with: cargo run -p jwt-auth
 
 [dependencies]
-rustapi-rs = { version = "0.1", features = ["jwt", "swagger-ui"] }
+rustapi-rs = { version = "0.1", features = ["jwt", "swagger-ui", "core-dashboard"] }
 tokio = { version = "1", features = ["full"] }
 serde = { version = "1", features = ["derive"] }

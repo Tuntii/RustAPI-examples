@@ -6,10 +6,11 @@
 //   2. Copy the token from the response.
 //   3. GET /profile  -H "Authorization: Bearer <token>"
 //
-// Lesson: JWT authentication, JwtLayer middleware, AuthUser<T> extractor,
-//         and skipping validation for public routes.
+// Lesson: JWT authentication with zero manual route registration.
+//         #[post/get] macros handle routing; JwtLayer + AuthUser<T> handle auth.
 
 use rustapi_rs::prelude::*;
+use rustapi_rs::{description, get, post, summary, tag};
 use std::time::{SystemTime, UNIX_EPOCH};
 
 // ---------------------------------------------------------------------------
@@ -60,17 +61,27 @@ struct ProfileResponse {
 }
 
 // ---------------------------------------------------------------------------
-// Handlers
+// Error type
 // ---------------------------------------------------------------------------
 
-/// Public login endpoint — issues a JWT on success.
+#[derive(ApiError)]
+enum AuthError {
+    #[error(status = 401, code = "UNAUTHORIZED", message = "Invalid credentials")]
+    InvalidCredentials,
+}
+
+// ---------------------------------------------------------------------------
+// Handlers — zero .route() calls needed
+// ---------------------------------------------------------------------------
+
+#[post("/auth/login")]
 #[tag("auth")]
 #[summary("Login")]
 #[description("Returns a signed JWT that must be sent as `Authorization: Bearer <token>`.")]
-async fn login(Json(payload): Json<LoginRequest>) -> Result<Json<TokenResponse>, Unauthorized> {
+async fn login(Json(payload): Json<LoginRequest>) -> Result<Json<TokenResponse>, AuthError> {
     // Hard-coded credentials for the demo.  Use a real user store in production.
     if payload.username != "alice" || payload.password != "secret" {
-        return Err(Unauthorized);
+        return Err(AuthError::InvalidCredentials);
     }
 
     let ttl = 3600_u64;
@@ -80,14 +91,14 @@ async fn login(Json(payload): Json<LoginRequest>) -> Result<Json<TokenResponse>,
         exp: now_plus_secs(ttl),
     };
 
-    let token = create_token(&claims, JWT_SECRET).map_err(|_| Unauthorized)?;
+    let token = create_token(&claims, JWT_SECRET).map_err(|_| AuthError::InvalidCredentials)?;
     Ok(Json(TokenResponse {
         token,
         expires_in: ttl,
     }))
 }
 
-/// Protected endpoint — requires a valid JWT.
+#[get("/profile")]
 #[tag("profile")]
 #[summary("Get my profile")]
 #[description("Requires `Authorization: Bearer <token>` header.")]
@@ -98,7 +109,7 @@ async fn profile(AuthUser(claims): AuthUser<Claims>) -> Json<ProfileResponse> {
     })
 }
 
-/// Public health check — no JWT needed.
+#[get("/health")]
 #[tag("ops")]
 #[summary("Health check")]
 async fn health() -> &'static str {
@@ -116,18 +127,15 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
     println!(" -> GET  http://127.0.0.1:3000/profile      (Authorization: Bearer <token>)");
     println!(" -> GET  http://127.0.0.1:3000/health       (public)");
     println!(" -> GET  http://127.0.0.1:3000/docs         (Swagger UI)");
+    println!(" -> GET  http://127.0.0.1:3000/__rustapi/dashboard");
 
-    RustApi::new()
-        .swagger_ui("/docs")
-        // JwtLayer validates every request except the skipped paths.
-        // Layer execution order is LIFO — place auth after logging/CORS.
+    // Only the JWT layer is wired up — all routes are auto-discovered from the macros above.
+    RustApi::auto()
         .layer(
             JwtLayer::<Claims>::new(JWT_SECRET)
-                .skip_paths(vec!["/auth/login", "/health", "/docs"]),
+                .skip_paths(vec!["/auth/login", "/health", "/docs", "/__rustapi/dashboard"]),
         )
-        .route("/auth/login", post(login))
-        .route("/profile", get(profile))
-        .route("/health", get(health))
+        .dashboard(DashboardConfig::new())
         .run("127.0.0.1:3000")
         .await
 }

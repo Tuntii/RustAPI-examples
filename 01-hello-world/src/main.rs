@@ -1,25 +1,25 @@
 // Run with: cargo run -p hello-world
-// Then visit: http://127.0.0.1:3000/hello
-//             http://127.0.0.1:3000/docs  (Swagger UI)
+// Then visit: http://127.0.0.1:3000/docs
 //
-// Lesson: basic routing, JSON responses, and auto-discovered OpenAPI docs.
+// Lesson: #[get] attribute macros auto-register routes — no .route() calls needed.
+//         RustApi::auto() discovers them all and serves /docs automatically.
 
 use rustapi_rs::prelude::*;
+use rustapi_rs::{description, get, summary, tag};
 
-/// A greeting returned by the API.
 #[derive(Serialize, Schema)]
 struct Greeting {
     message: String,
     framework: &'static str,
 }
 
-/// Plain text root endpoint.
+#[get("/")]
 #[summary("Root")]
 async fn root() -> &'static str {
     "Welcome to RustAPI!"
 }
 
-/// JSON greeting endpoint.
+#[get("/hello/{name}")]
 #[tag("hello")]
 #[summary("Say hello")]
 #[description("Returns a JSON greeting with a custom name.")]
@@ -30,7 +30,7 @@ async fn hello(Path(name): Path<String>) -> Json<Greeting> {
     })
 }
 
-/// Handler that always returns HTTP 204 No Content.
+#[get("/health")]
 #[summary("Health check")]
 async fn health() -> NoContent {
     NoContent
@@ -43,14 +43,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
     println!(" -> GET  http://127.0.0.1:3000/hello/{{name}}");
     println!(" -> GET  http://127.0.0.1:3000/health");
     println!(" -> GET  http://127.0.0.1:3000/docs");
+    println!(" -> GET  http://127.0.0.1:3000/__rustapi/dashboard");
 
-    // RustApi::auto() discovers all handlers defined with #[auto_route]
-    // or registered manually via .route().
-    RustApi::new()
-        .swagger_ui("/docs")
-        .route("/", get(root))
-        .route("/hello/{name}", get(hello))
-        .route("/health", get(health))
+    // Zero configuration — #[get] macros register every route at compile time.
+    // Swagger UI lands at /docs automatically.
+    // Dashboard lands at /__rustapi/dashboard.
+    RustApi::auto()
+        .dashboard(DashboardConfig::new())
         .run("127.0.0.1:3000")
         .await
 }

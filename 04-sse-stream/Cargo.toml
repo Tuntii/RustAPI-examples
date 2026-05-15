@@ -7,7 +7,7 @@ license.workspace = true
 # Run with: cargo run -p sse-stream
 
 [dependencies]
-rustapi-rs = { version = "0.1" }
+rustapi-rs = { version = "0.1", features = ["swagger-ui", "core-dashboard"] }
 tokio = { version = "1", features = ["full"] }
 serde = { version = "1", features = ["derive"] }
 futures-util = "0.3"
