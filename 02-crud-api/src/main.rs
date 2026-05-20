@@ -80,9 +80,9 @@ impl From<NoteError> for ApiError {
 #[summary("List all notes")]
 async fn list_notes(State(state): State<AppState>) -> Json<Vec<Note>> {
     let notes = state.notes.read().await;
-    let mut items: Vec<_> = notes.values().cloned().collect();
+    let mut items: Vec<_> = notes.values().collect();
     items.sort_by_key(|n| n.id);
-    Json(items)
+    Json(items.into_iter().cloned().collect())
 }
 
 #[post("/notes")]
@@ -130,7 +130,9 @@ async fn update_note(
     Json(payload): Json<UpdateNote>,
 ) -> Result<Json<Note>, ApiError> {
     let mut notes = state.notes.write().await;
-    let note = notes.get_mut(&id).ok_or_else(|| ApiError::not_found("Note not found"))?;
+    let note = notes
+        .get_mut(&id)
+        .ok_or_else(|| ApiError::not_found("Note not found"))?;
     if let Some(t) = payload.title {
         note.title = t;
     }
