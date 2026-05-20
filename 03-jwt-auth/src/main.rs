@@ -67,6 +67,7 @@ struct ProfileResponse {
 // NOTE: #[derive(ApiError)] generates IntoResponse for custom error enums.
 //       Handler return types must use ApiError directly (it implements ResponseModifier).
 #[derive(ApiError)]
+#[allow(dead_code)]
 enum AuthError {
     #[error(status = 401, code = "UNAUTHORIZED", message = "Invalid credentials")]
     InvalidCredentials,
@@ -101,7 +102,7 @@ async fn login(Json(payload): Json<LoginRequest>) -> Result<Json<TokenResponse>,
         exp: now_plus_secs(ttl),
     };
 
-    let token = create_token(&claims, JWT_SECRET).map_err(|_| ApiError::unauthorized("Invalid credentials"))?;;
+    let token = create_token(&claims, JWT_SECRET).map_err(|_| ApiError::unauthorized("Invalid credentials"))?;
     Ok(Json(TokenResponse {
         token,
         expires_in: ttl,
