@@ -58,6 +58,7 @@ struct UpdateNote {
 //       Handler return types must use ApiError directly (it implements ResponseModifier).
 //       NoteError is kept here to show the derive pattern; use ApiError in handlers.
 #[derive(ApiError)]
+#[allow(dead_code)]
 enum NoteError {
     #[error(status = 404, code = "NOT_FOUND", message = "Note not found")]
     NotFound,
