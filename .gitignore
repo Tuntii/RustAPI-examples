@@ -1,26 +1,17 @@
-/serverless-lambda/target
-/serverless-lambda/target
-/serverless-lambda
-/microservices/target
-/cors-test/target
-/graphql-api/target
-/hello-world/target
-/mcp-server/target
-/middleware-chain/target
-/phase11-demo/target
-/rate-limit-demo/target
-/toon-api/target
-/cors-test
-/cors-test/target
-/rate-limit-demo/target
-/event-sourcing/target
-/microservices-advanced/target
-/auth-api/target
-/crud-api/target/debug
-/crud-api/target
-*.timestamp
-/proof-of-concept/target
-/sqlx-crud/target
-/templates/target
-/websocket/target
-/target
+# Build artifacts
+**/target/
+**/*.timestamp
+
+# IDE / editor
+.idea/
+.vscode/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Local env / logs
+.env
+*.log
+

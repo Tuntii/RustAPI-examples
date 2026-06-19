@@ -93,7 +93,7 @@ This repository contains **18 production-ready examples** organized by category:
 | Example | Difficulty | Description | Key Features |
 |---------|------------|-------------|--------------|
 | [toon-api](toon-api/) | ⭐⭐ | Token-optimized responses | `ToonResponse`, content negotiation, token headers |
-| [mcp-server](mcp-server/) | ⭐⭐⭐ | Model Context Protocol | Tool definitions, resource management, AI agents |
+| [mcp-server](05-mcp-server/) | ⭐⭐⭐ | Model Context Protocol (MCP tools) | In-process invocation (`InvocationMode::InProcess`), agent tools, Claude/Cursor integration, full pipeline respect |
 
 ### 🌐 Real-time & Web
 
@@ -127,6 +127,7 @@ This repository contains **18 production-ready examples** organized by category:
 | `RateLimitLayer` | rate-limit-demo, auth-api, cors-test, proof-of-concept |
 | `CorsLayer` | cors-test, middleware-chain, proof-of-concept |
 | `ToonResponse` | toon-api, mcp-server |
+| `MCP` (protocol-mcp) | mcp-server |
 | `WebSocket` / `WsConnection` | websocket |
 | `View<T>` / `ViewEngine` | templates |
 | `State<T>` | All examples with shared state |
@@ -147,6 +148,7 @@ Each example uses specific Cargo feature flags. See [FEATURES.md](FEATURES.md) f
 | `cors` | CORS middleware | cors-test, middleware-chain, proof-of-concept |
 | `rate-limit` | Rate limiting | rate-limit-demo, auth-api, cors-test, proof-of-concept |
 | `toon` | TOON format for LLMs | toon-api, mcp-server |
+| `protocol-mcp` | MCP / AI agent tools | mcp-server |
 | `ws` | WebSocket support | websocket |
 | `view` | Template rendering | templates |
 | `swagger-ui` | Swagger UI at /docs | toon-api |
@@ -163,6 +165,9 @@ cd rustapi-rs-examples
 
 # Run any example
 cargo run -p hello-world
+
+# Run the MCP + HTTP demo (AI agent tools)
+cargo run -p mcp-server
 
 # Run with debug logging
 RUST_LOG=debug cargo run -p crud-api

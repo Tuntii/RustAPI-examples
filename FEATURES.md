@@ -196,7 +196,7 @@ rustapi-rs = { version = "0.2", features = ["toon"] }
 
 **Used in examples**:
 - [toon-api](toon-api/) — TOON format demonstration
-- [mcp-server](mcp-server/) — MCP with TOON optimization
+- [mcp-server](05-mcp-server/) — MCP with TOON optimization
 
 **Example usage**:
 ```rust

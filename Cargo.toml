@@ -5,6 +5,7 @@ members = [
     "02-crud-api",
     "03-jwt-auth",
     "04-sse-stream",
+    "05-mcp-server",
 ]
 
 [workspace.package]

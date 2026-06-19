@@ -1,0 +1,14 @@
+[package]
+name = "mcp-server"
+version = "0.1.0"
+edition.workspace = true
+license.workspace = true
+
+# Run with: cargo run -p mcp-server
+# HTTP API: http://127.0.0.1:8080
+# MCP tools: http://127.0.0.1:9090  (connect Claude / Cursor / agents here)
+
+[dependencies]
+rustapi-rs = { version = "0.1.507", features = ["protocol-mcp", "swagger-ui"] }
+tokio = { version = "1", features = ["full"] }
+serde = { version = "1", features = ["derive"] }
